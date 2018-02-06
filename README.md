@@ -57,11 +57,11 @@ Similarly in the `register.ejs` page, when the user presses the register button,
 The MySQL database for this project consists of the following two tables, `users` and `ipslocked`. There are no relationships between these two tables based on the project requirements.
 
 * `users`- a table where all users for the app is stored. It contains three fields as follows:
-  1. `id (INT)`- this is an auto-incremented index field that increments when a new row is added to the table. The entries into this field be unique, not null and is the primary key of the table.
+  1. `id (INT)`- this is an auto-incremented index field that increments when a new row is added to the table. The entries into this field must be unique, not null, and this field is the primary key of the table.
   2. `username (VARCHAR(45))`- this is where the username, the user enters is stored as a string. The username must also be unique and not null.
   3. `password (VARCHAR(60))`- this is where the encrypted password is stored as a string. The password must be not null.
   4. `salt (VARCHAR(60))`- this is the encryption key for the particular password stored as a string. It  provides extra encryption to your password and is stored so that it can be used when checking if the password entered by user is matches the password stored.
-  5. `failedLoginAttempts (INT(11))`- this is a count of the number of times the user has entered an incorrect password for the particular username. The count is stored in an int field and is later reset to 0 when the user enters the correct password.
+  5. `failedLoginAttempts (INT(11))`- this is a count of the number of times the user has entered an incorrect password for the particular username. The count is stored in an INT field and is later reset to 0 when the user enters the correct password.
 
 * `ipslocked` - a table that stores all IP addresses that have crossed the brute force prevention limit for this app. This limit is 13 failed logins within 10 minutes regardless of username. It contains two fields as follows:
   1. `ipaddress (VARCHAR(45))`- this is where the user's IP address is stored once they have crossed the brute force prevention limit. It must be unique, not null and is the primary key of the table.
