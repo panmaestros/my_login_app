@@ -57,7 +57,7 @@ Similarly in the `register.ejs` page, when the user presses the register button,
 The MySQL database for this project consists of the following two tables, `users` and `ipslocked`. There are no relationships between these two tables based on the project requirements.
 
 * `users`- a table where all users for the app is stored. It contains three fields as follows:
-  1. `id (INT)`- this is an auto-incremented index field that increments when a new row is added to the table. The entries into this field not be unique, not null and is the primary key of the table.
+  1. `id (INT)`- this is an auto-incremented index field that increments when a new row is added to the table. The entries into this field be unique, not null and is the primary key of the table.
   2. `username (VARCHAR(45))`- this is where the username, the user enters is stored as a string. The username must also be unique and not null.
   3. `password (VARCHAR(60))`- this is where the encrypted password is stored as a string. The password must be not null.
   4. `salt (VARCHAR(60))`- this is the encryption key for the particular password stored as a string. It  provides extra encryption to your password and is stored so that it can be used when checking if the password entered by user is matches the password stored.
@@ -69,18 +69,18 @@ The MySQL database for this project consists of the following two tables, `users
 
 
 ## Tests
-You can perform the following tests on the system to ensure the functionality.
+You can perform the following tests on the system to ensure proper functionality.
 
 1. Register a new user on the register page and you should register successfully and be taken to your profile.
 2. Refresh your page after 10 seconds and you should be logged out.
 3. Go to your login page and login with your correct credentials and check the remember box and you should be logged in successfully. You would also get an extended session for 1 minute. After 1 minute you should then be logged out.
 4. Enter an incorrect password for your account more than 2 times and your account should be locked. To get access back into your account go to the database and set the field `failedLoginAttempts` in the `users` table back to 0.
-5. To test the brute force prevention limit follow these steps,
-  * you should first stop your server `press ctrl + c`. then go to your `server.js` file in your project.
-  * Search for a variable called `testmode`, and set it to `true`. This will change the settings of your brute force prevention limit from `13 requests every 10 minutes and lock your account for 20 minutes` to `3 requests every 10 seconds and lock your account for 1 minute`.
-  * Then save and restart the server, `npm start`. Go to your login page, `localhost:8080/login`.
-  * Manually enter 3 random usernames and passwords within 10 seconds and on the third attempt your request will be blocked.
-  * You can then check after 10 seconds that you still will not be able to access your account until 1 minute has passed.
+5. To test the brute force prevention limit follow these steps.
+    * You should first stop your server `press ctrl + c`. then go to your `server.js` file in your project.
+    * Search for a variable called `testmode`, and set it to `true`. This will change the settings of your brute force prevention limit from `13 requests every 10 minutes and lock your account for 20 minutes` to `3 requests every 10 seconds and lock your account for 1 minute`.
+    * Then save and restart the server, `npm start`. Go to your login page, `localhost:8080/login`.
+    * Manually enter 3 random usernames and passwords within 10 seconds and on the third attempt your request will be blocked.
+    * You can then check after 10 seconds that you still will not be able to access your account until 1 minute has passed.
 
 
 
