@@ -13,7 +13,7 @@ var session = require("express-session");//used to create user sessions with pas
 var passport = require("passport");//used to authenicate users in the app
 var flash = require('connect-flash');//used to display messages to the
 
-const testmode = true; // if true the system would lock your ipaddress for 1 minute if you make 3 requests within 10 seconds, else if false the system would lock your ipaddress for 20 minutes if you make 13 requests in 10 minutes
+const testmode = false; // if true the system would lock your ipaddress for 1 minute if you make 3 requests within 10 seconds, else if false the system would lock your ipaddress for 20 minutes if you make 13 requests in 10 minutes
 const parameters = testmode ?
 {
   minutesLocked: 1, // lock your ip address for 1 minute
