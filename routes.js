@@ -12,12 +12,15 @@ var limiter = new RateLimit({
   delayMs: 0, // disable delaying - full speed until the max limit is reached
   message: 'Too many requests, please try again later.',//Error message returned when max is exceeded.
   onLimitReached: function(req, res, options){
-
+    //a function called everytime the request limit is reached.
+    //when the limit is reached this function stores the ip address of the user who crossed the limit along with the time the limit was reached.
     console.log("Limit Reached called");
-    const myLockTime =  moment(new Date()).format("YYYY-MM-DD HH:mm:ss");
-    const ipaddress = req.ip;
-      mysqlpool.getConnection(function(err, connection){
+    const myLockTime =  moment(new Date()).format("YYYY-MM-DD HH:mm:ss");// convert new javascript date to format to process using moment library
+    const ipaddress = req.ip;//get the ipaddress of the user making to request.
 
+      mysqlpool.getConnection(function(err, connection){//create a sql connection
+        //check if the ipaddress currently exists in the table if it does update the column, lastLockedTime.
+        //if the ipaddress does not exist, create a new row with the ipaddress and timestamp.
         connection.query("select * from ipslocked where ipaddress = ?",[ipaddress],function(err,rows){
           if (err)
           {
@@ -25,11 +28,15 @@ var limiter = new RateLimit({
             return done(err);
           }
           if (rows.length>0) {
+            //check is the ipaddress already exists. it exists if the count is greater than 0.
             if(rows[0].lastLockedTime!==null)
             {
+              //checks if the ipaddress already has a lastLockedTime. If it does have a lastLockedTime that means the ipaddress is already in the 20 minutes waiting period
+              //so we only want to update the ipaddress with a new timestamp when the lastLockedTime is reset back to null. This occurs when the user logs back in after 20 minutes
               connection.release();
               return;
             }
+            //here is where the ipaddress is updated with a new lastLockedTime timestamp
             connection.query("update ipslocked set lastLockedTime= ? where ipaddress = ?",[myLockTime, ipaddress],function(err,result){
               if(err){
                 console.log("Error updating locked time:"+err);
@@ -51,6 +58,10 @@ var limiter = new RateLimit({
                 connection.release();
                 return err;
               }
+              else{
+                connection.release();
+                return;
+              }
 
           });
         }
@@ -67,18 +78,15 @@ module.exports = function(app, passport) {
     // =====================================
     // LOGIN ===============================
     // =====================================
-    // show the login form
-    //app.use(upload);
+
     app.get('/login', isNotLoggedIn, function(req, res) {
         // render the page and pass in any flash data if it exists
-        //console.log(req.user);
+
         var options = {};
         options.message = req.flash('loginMessage');
 
         res.render('ejs/login', options);
     });
-    // process the login form
-
 
     app.post('/login', limiter, passport.authenticate('local-login', {
         successRedirect: '/profile', // redirect to the secure profile section
@@ -114,13 +122,13 @@ module.exports = function(app, passport) {
         function(req, res) {
             var options = {};
             options.user = req.user;
-
+            //pass in user data to profile page
             res.render('ejs/profile', options);
         });
 
 
 
-
+//default route that go home page if the other routes above dont match
     app.get("/*", function(req, res) {
         res.render('ejs/index');
     });
@@ -138,10 +146,10 @@ module.exports = function(app, passport) {
     // route middleware to make sure
     function isNotLoggedIn(req, res, next) {
 
-        // if user is authenticated in the session, carry on
+        // if user is not authenticated in the session, carry on
         if (!req.isAuthenticated())
             return next();
-        // if they aren't redirect them to the home page
+        // if they are redirect them to the profile page
         res.redirect('/profile');
     }
 }

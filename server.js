@@ -28,7 +28,7 @@ app.use(bodyParser.json());
 app.use(session({
     secret: "thisisthesecretforsession",//secret session cookie is signed with this secret to prevent tampering
     cookie: { maxAge: 10000 },// global time for all user sessions which  expires after 10s, value in milliseconds,
-                                            //Each session has a unique cookie object accompany it. This allows
+                                            //Each session has a unique cookie object to accompany it. This allows
                                             //you to alter the session cookie per visitor. This is shown in remember me login feature
 
 
