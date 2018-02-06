@@ -22,8 +22,8 @@ This project is a basic login and register web application built using Node-Expr
 
 This project is built with Nodejs and a MySQL so the following software are required to be installed.
 
-1. Download and install nodejs and the npm package manager with this link: [https://nodejs.org/en/download/]
-2. You must download MySQL Server and MySQL Workbench using the mysql installer, follow this link: [https://dev.mysql.com/downloads/installer/]
+1. Download and install nodejs and the npm package manager with this link: https://nodejs.org/en/download/
+2. You must download MySQL Server and MySQL Workbench using the mysql installer, follow this link: https://dev.mysql.com/downloads/installer/
 
 ## Installation Instructions
 
@@ -31,13 +31,13 @@ To install this project you complete the instructions set below.
 
 1. Open MySQL workbench and create a local instance and record the port, user and password when creating the instance.
 2. Open the npm package console window that comes installed with nodejs
-3. Clone  or download the zip for this repo: git clone [https://github.com/panmaestros/my_login_app.git]
+3. Clone  or download the zip for this repo: git clone https://github.com/panmaestros/my_login_app.git
 4. Go to the directory of the clone project in your npm package console window.
 5. Install packages by running this command: `npm install`
 6. Edit the mysql.js database configuration file with the port, user and password from the mysql local instance you created above : `mysql.js`
 7. Create the database schema in the mysql instance by copying the entire MySQL code in the create_database.js file and pasting it into a new Query window in your MySQL instance : `mysql_scripts/create_database.js`
 8. Launch the app by using this command: `npm start`
-9. Visit in your browser at: [http://localhost:8080]
+9. Visit in your browser at: http://localhost:8080
 
 ## Client & Server Object Model Explained
 
