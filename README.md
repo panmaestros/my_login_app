@@ -4,11 +4,11 @@
 
 This project is a basic login and register web application built using Node-Express using EJS templates and MySQL. For this project there are four web pages as follows:
 
-* Index (Home) page: `views/ejs/index.js` - This page is the home page and the default page shoen to the user. It contains only a navigation to the login and register pages
+* Index (Home) page: `views/ejs/index.js` - This page is the home page and the default page shown to the user. It contains only a navigation to the login and register pages.
 * Register page: `views/ejs/register.js` - This page is the register page where you can create a new user for the website by inputing a username and password.
-* Login page: `views/ejs/login.js` - This page is the login page where you can log into your account with username and password. The login page has extra protection features to prevent unwanted attackers from access an account. The extra protection features are as follows:
+* Login page: `views/ejs/login.js` - This page is the login page where you can log into your account with username and password. The login page has extra protection features to prevent unwanted attackers from accessing an account. The extra protection features are as follows:
 
-    1. Enter an incorrect password three times for a particular user and your account would be locked. A successful login also resets the amount failed attempts made.
+    1. Enter an incorrect password three times for a particular user and your account would be locked. A successful login also resets the amount failed attempts made before the account is locked.
 
     2. Entering random usernames and passwords 13 times in the span of 10 minutes would result in your ipaddress being block from logging in for 20 minutes.
 
@@ -90,7 +90,7 @@ You can perform the following tests on the system to ensure proper functionality
 * User Authentication was built using Passport API:[https://github.com/jaredhanson/passport]
 * Connection and querying of the MySQL database was done using MySQL API: [https://github.com/mysqljs/mysql]
 * Session management was done using Express Session and Cookie Parser API: [https://github.com/expressjs/session] & [https://github.com/expressjs/cookie-parser]
-* Password encryptionwas done using Bcrypt API: [https://www.npmjs.com/package/bcrypt-nodejs]
+* Password encryption was done using Bcrypt API: [https://www.npmjs.com/package/bcrypt-nodejs]
 * EJS was used as the templating language to built the webUI pages: [https://github.com/tj/ejs]
 * Brute force attack prevention was done using Express Rate Limit API: [https://github.com/nfriedly/express-rate-limit]
 
