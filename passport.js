@@ -6,10 +6,14 @@ var mysqlpool = require('./mysql').pool; // used to connect to your mysql databa
 var moment = require('moment'); // used for processing dates  for javascript and mysql.
 
 
-const minutesLocked = 20; //2// this is the amount of time to disable an ipaddress of a user performing a brute force attack
+
 
 // expose this function to app using module.exports
-module.exports = function(passport) {
+module.exports = function(passport, parameters) {
+
+
+  const minutesLocked = parameters.minutesLocked; // this is the amount of time to disable an ipaddress of a user performing a brute force attack
+
   	// =========================================================================
       // passport session setup ==================================================
       // =========================================================================
@@ -166,7 +170,7 @@ module.exports = function(passport) {
               {
                 //if the ipaddress exists then we check if the ipaddress has an datetime in the lastLockedTime passwordField
                 //if a datetime exists then the user has an account that should be locked for 20 minutes.
-                //we then check the datetime has past 20 minutes, if it has then unlock the ipaddress by setting the lastLockedTime to null.
+                //we then check the datetime has past 20 minutes or 1 minutte if in testmode, if it has then unlock the ipaddress by setting the lastLockedTime to null.
                 if(ipdata[0].lastLockedTime!=null)
                 {
                   const lockedTime = moment(ipdata[0].lastLockedTime).format("YYYY-MM-DD HH:mm:ss");//formatting the lastLockedTime stored in database
@@ -189,10 +193,11 @@ module.exports = function(passport) {
                     });
                   }
                   else {
-                    //if the minutes difference is less than 20 minutes then throw a flash message to the user stating the account is suspended for 20 minutes
+                    //if the minutes difference is less than 20 minutes or 1 minute if in testmode then throw a flash message to the user stating the account is suspended for 20 minutes
                     connection.release();
-                    console.log("Your ipaddress is suspended for 20 minutes");
-                    return done(null, false, req.flash('loginMessage', 'Your ipaddress is suspended for 20 minutes.')); // req.flash is the way to set flashdata using connect-flash
+                    const minuteslabel = minutesLocked==1 ? " minute" : " minutes";
+                    console.log("Your ipaddress is suspended for "+minutesLocked+ minuteslabel);
+                    return done(null, false, req.flash('loginMessage', 'Your ipaddress is suspended for '+minutesLocked+ minuteslabel)); // req.flash is the way to set flashdata using connect-flash
                   }
                 }
               }
@@ -211,7 +216,7 @@ module.exports = function(passport) {
                     connection.release();
                     return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
                   }
-                  if (rows[0].failedLoginAttempts>2) {
+                  if (rows[0].failedLoginAttempts>1) {
                     //This section achieves the objective: 1) 3 failed consecutive login attempts using the same username results in a locked user account
                     //if the failedLoginAttempts field is greater than 2 then return an error to user saying the account is locked
                     console.log("Your account is locked");
@@ -231,6 +236,7 @@ module.exports = function(passport) {
                     //if the password is incorrect then we record the failure attempt in the database below
                     console.log("Password incorrect");
                     const newfailedcount = rows[0].failedLoginAttempts +1;//increment failed login count and update failed login count
+                    console.log("Failed attempts: "+rows[0].failedLoginAttempts)
                     connection.query("update users set failedLoginAttempts= ? where username = ?",[newfailedcount,rows[0].username],function(err,result){
                       if (err)
                       {

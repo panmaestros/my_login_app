@@ -13,9 +13,22 @@ var session = require("express-session");//used to create user sessions with pas
 var passport = require("passport");//used to authenicate users in the app
 var flash = require('connect-flash');//used to display messages to the
 
+const testmode = true; // if true the system would lock your ipaddress for 1 minute if you make 3 requests within 10 seconds, else if false the system would lock your ipaddress for 20 minutes if you make 13 requests in 10 minutes
+const parameters = testmode ?
+{
+  minutesLocked: 1, // lock your ip address for 1 minute
+  windowMs: 10*1000, // the brute force limit is 10 seconds for 3 request
+  max: 2,
 
+}
+:
+{
+  minutesLocked: 20, // lock your ip address for 13 minutes
+  windowMs: 10*60*1000, // the brute force limit is 10 minutes for 13 request
+  max: 12,
+}
 
-require('./passport')(passport); // pass passport to configure passport to our app
+require('./passport')(passport,parameters); // pass passport to configure passport to our app
 
 
 //app.use(morgan('dev')); // log requests to the console
@@ -48,7 +61,7 @@ app.set('views', path.join(__dirname, 'views'));
 //we specify to the server that we are using ejs template language
 app.set('view engine', 'ejs');
 
-require('./routes')(app, passport); // load our routes and pass in our app with our fully configured passport
+require('./routes')(app, passport,parameters); // load our routes and pass in our app with our fully configured passport
 
 
 // START THE SERVER and listen on port 8080
