@@ -97,4 +97,4 @@ You can perform the following tests on the system to ensure proper functionality
 ## Disclaimer Notes
 
 * This project will not be maintained or updated anymore.
-* This project was not built using the latest ES6 syntax and Promises. This was mainly due to the libraries being used. As such this project may be outdated soon.
+* This project was not built using the latest ES6 syntax and Promises. This was mainly due to the libraries and the node version being used. As such this project may be outdated soon.
